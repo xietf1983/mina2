@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"> -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<bean id="xwScheduler "
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false">
+		<property name="triggers">
+			<list>
+				<!--布控号牌初始化 -->
+				<ref bean="dataSendJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!-- 布控匹配 -->
+	<bean id="com.liveyc.scheduling.GaVehViolationJob"
+		class="com.liveyc.scheduling.GaVehViolationJob">
+	</bean>
+	
+	<bean id="gaVehViolation"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="com.liveyc.scheduling.GaVehViolationJob" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="gaVehViolationMachTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="gaVehViolation" />
+		</property>
+		<property name="startDelay">
+			<value>24000</value>
+		</property>
+		<property name="repeatInterval">
+			<value>3153600000000</value>
+		</property>
+	</bean>
+	<bean id="com.liveyc.mina.client.DataSendJob"
+		class="com.liveyc.mina.client.DataSendJob">
+	</bean>
+	
+	<bean id="dataSendJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="com.liveyc.mina.client.DataSendJob" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="dataSendJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="dataSendJob" />
+		</property>
+		<property name="startDelay">
+			<value>6000</value>
+		</property>
+		<property name="repeatInterval">
+			<value>3153600000000</value>
+		</property>
+	</bean>
+</beans>
