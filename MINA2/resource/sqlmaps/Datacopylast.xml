@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="GB2312" standalone="no"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Datacopylast">
+	<typeAlias alias="datacopylast"
+		type="com.lytx.webservice.datacopylast.model.DatacopyLast" />
+	<typeAlias alias="failDataLast" type="com.liveyc.mina.client.FailDataLast" />
+	<typeAlias alias="passvehicle"
+		type="com.liveyc.mina.client.model.PassVehicleModel" />
+	<sql id="Datacopylast_condition">
+		where 1=1
+		<isNotEmpty prepend='AND' property='domainid'>
+			(x.domainid =
+			'$domainid$' )
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='action'>
+			(x.action = '$action$' )
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='datalasttime1'>
+			<![CDATA[ (x.datalasttime >= to_date(#datalasttime1#,'yyyy-mm-dd hh24:mi:ss') )]]>
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='datalasttime2'>
+			<![CDATA[ (x.datalasttime <= to_date(#datalasttime2#,'yyyy-mm-dd hh24:mi:ss') )]]>
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='acttime1'>
+			<![CDATA[ (x.acttime >= to_date(#acttime1#,'yyyy-mm-dd hh24:mi:ss') )]]>
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='acttime2'>
+			<![CDATA[ (x.acttime <= to_date(#acttime2#,'yyyy-mm-dd hh24:mi:ss') )]]>
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='detail'>
+			(x.detail = '$detail$' )
+		</isNotEmpty>
+		<isNotEmpty prepend='AND' property='lastseq'>
+			(x.lastseq = '$lastseq$'
+			)
+		</isNotEmpty>
+		<isNotEmpty property='order'>
+			$order$
+		</isNotEmpty>
+	</sql>
+	<insert id="Datacopylast_insert" parameterClass="java.util.HashMap">
+		insert into
+		datacopylast(
+		domainid,action,datalasttime,acttime,detail,lastseq
+		)values(
+		#domainid#,#action#,to_date(#datalasttime#,'yyyy-MM-dd
+		hh24:mi:ss'),sysdate,#detail#,#lastseq#
+		)
+	</insert>
+	<update id="Datacopylast_update" parameterClass="java.util.HashMap">
+		update
+		datacopylast set
+		action=#action#,datalasttime=to_date(#datalasttime#,'yyyy-MM-dd
+		hh24:mi:ss'),acttime=sysdate,detail=#detail#,lastseq=#lastseq#
+		where
+		domainid=#domainid#
+	</update>
+	<delete id="Datacopylast_delete" parameterClass="java.util.HashMap">
+		delete from datacopylast x
+		<include refid="Datacopylast_condition" />
+	</delete>
+	<select id="Datacopylast_load" resultClass="java.util.HashMap"
+		parameterClass="java.util.HashMap">
+		select
+		x.domainid,x.action,to_char(x.datalasttime,'yyyy-mm-dd
+		hh24:mi:ss') AS datalasttime,to_char(x.acttime,'yyyy-mm-dd
+		hh24:mi:ss') AS acttime,x.detail,x.lastseq
+		from datacopylast x
+		<include refid="Datacopylast_condition" />
+	</select>
+	<select id="Datacopylast_list" resultClass="java.util.HashMap"
+		parameterClass="java.util.HashMap">
+		select
+		x.domainid,x.action,to_char(x.datalasttime,'yyyy-mm-dd
+		hh24:mi:ss') AS datalasttime,to_char(x.acttime,'yyyy-mm-dd
+		hh24:mi:ss') AS acttime,x.detail,x.lastseq
+		from datacopylast x
+		<include refid="Datacopylast_condition" />
+	</select>
+	<select id="Datacopylast_count" resultClass="java.lang.Integer"
+		parameterClass="java.util.HashMap">
+		select count(*) from datacopylast x
+		<include refid="Datacopylast_condition" />
+	</select>
+
+	<select id="gavehviolation_max" resultClass="java.util.HashMap"
+		parameterClass="java.util.Map">
+		select
+		max(alarmid) as ALARMID
+		from
+		gavehviolationupload2
+		where
+		1=1
+	</select>
+	<select id="gavehviolation_start" resultClass="java.util.HashMap"
+		parameterClass="java.util.Map">
+		<![CDATA[ select
+			min(alarmid) as ALARMID
+		from 
+			gavehviolationupload2
+		where
+			ALARMID>#ALARMID#
+		]]>
+	</select>
+	<select id="gavehviolation_list_alarmid" resultClass="java.util.HashMap"
+		parameterClass="java.util.Map">
+		SELECT
+		ALARMID, RULEID, FDID, TO_CHAR(CHANNELTYPE) CHANNELTYPE,
+		TO_CHAR(CHANNELID)
+		CHANNELID, FDNAME,
+		CHANNELNAME, ALARMSESSIONID,
+		ALARMSEQ, ALARMTYPE, ALARMTYPEMINOR,
+		ALARMTIME,
+		TO_CHAR(ALARMTIME,'yyyy-mm-dd hh24:mi:ss') ALARMTIMESTR,
+		SEVERITYLEVEL, DETAIL, CENTERSTOREKEY, PLATENO,
+		decode(PLATETYPE,'大型汽车','01','小型汽车','02','02') as PLATETYPE,
+		PLATECOLOR, PLATECHARACTERCOLOR, VEHICLECOLOR,
+		VEHICLETYPE,
+		VEHICLELONG, TO_CHAR(RECORDEDSPEED) RECORDEDSPEED,
+		TO_CHAR(SPEEDMIN)
+		SPEEDMIN, TO_CHAR(SPEEDMAX) SPEEDMAX, MONITORLOCATIONID,
+		MONITORLOCATIONNAME, TO_CHAR(LONGITUDE) LONGITUDE, TO_CHAR(LATITUDE)
+		LATITUDE,
+		MANAGERROLEID, MANAGERROLENAME,STORAGEAREAID,
+		violationCode,
+		dealStatus,dealer,dealTime,TO_CHAR(dealTime,'yyyy-mm-dd hh24:mi:ss')
+		dealTimeStr,
+		vehicleBrand,owner,ownerAddr,ownerTel,
+		checker,checkTime,TO_CHAR(checkTime,'yyyy-mm-dd hh24:mi:ss')
+		checkTimeStr,
+		invalider,invalidTime,TO_CHAR(invalidTime,'yyyy-mm-dd
+		hh24:mi:ss')
+		invalidTimeStr,
+		punisher,punishTime,TO_CHAR(punishTime,'yyyy-mm-dd hh24:mi:ss')
+		punishTimeStr,
+		uploader,uploadTime,TO_CHAR(uploadTime,'yyyy-mm-dd
+		hh24:mi:ss')
+		uploadTimeStr,
+		REDLIGHTBEGINTIME,REDLIGHTLAST,
+		dealWFDM,dealWFJF,dealWFJE,dealWFNR,decode(g.VEHICLEFROM,null,P.VEHICLEFROM,'',P.VEHICLEFROM,g.VEHICLEFROM)
+		as VEHICLEFROM,
+		P.JJLOCATION,P.JJFD, P.VEHICLECHANNEL,P.AREA,P.DEPT
+		FROM
+		gavehviolationupload g,gavehviolationpolice P
+		WHERE
+		1=1
+		and g.fdid =
+		p.LYFD and g.channelid = p.LYchannel and PLATENO not in
+		(select plateNo
+		from PLATENOWHITELIST )
+		<isNotEmpty prepend="AND" property="ALARMID1">
+        	<![CDATA[ ALARMID >#ALARMID1#	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ALARMID2">
+        	<![CDATA[ ALARMID <=#ALARMID2#	]]>
+		</isNotEmpty>
+	</select>
+	<select id="gavehviolation_list_checked" resultClass="java.util.HashMap"
+		parameterClass="java.util.Map">
+		<![CDATA[select * from ( SELECT
+                ALARMID,  g.FDID, TO_CHAR(CHANNELTYPE) CHANNELTYPE, TO_CHAR(g.CHANNELID) CHANNELID,
+                 ( select COUNT(*) from  PLATENOWHITELIST w where w.plateNo =g.plateNo) as PLATENOWHIT,
+                ALARMTIME, TO_CHAR(ALARMTIME,'yyyy-mm-dd hh24:mi:ss') ALARMTIMESTR,
+                 DETAIL, CENTERSTOREKEY, PLATENO, decode(PLATETYPE,'大型汽车','01','小型汽车','02','02') as PLATETYPE,
+                PLATECOLOR, PLATECHARACTERCOLOR, VEHICLECOLOR, 
+                VEHICLETYPE, VEHICLELONG, TO_CHAR(RECORDEDSPEED) RECORDEDSPEED, 
+                TO_CHAR(SPEEDMIN) SPEEDMIN, TO_CHAR(SPEEDMAX) SPEEDMAX, MONITORLOCATIONID, 
+                MONITORLOCATIONNAME, TO_CHAR(LONGITUDE) LONGITUDE, TO_CHAR(LATITUDE) LATITUDE, 
+                STORAGEAREAID,           
+                violationCode,
+                dealStatus,dealer,dealTime,TO_CHAR(dealTime,'yyyy-mm-dd hh24:mi:ss') dealTimeStr,
+                REDLIGHTBEGINTIME,REDLIGHTLAST,p.CODEINFO as DEVICEID, p.cdh as DEVICE_TYPE 
+        FROM 
+            gavehviolationupload g left join (select * from  device_jcbk where SENDTYPE=4) P
+             
+             
+           on   g.fdid = p.FDID and g.channelid = p.channelid      order by  ALARMTIME desc ) where rownum < 10
+         ]]>
+	</select>
+	<delete id="gavehviolationupload_delete" parameterClass="long">
+		delete
+		from gavehviolationupload where ALARMID=#value#
+	</delete>
+	<select id="minAlarmId_vehicleAlarm" resultClass="long"
+		parameterClass="long">
+		select Min(trackid)
+		from vehicleAlarm where
+		trackid>#fromId#
+	</select>
+	<select id="vehicleAlarm_List" resultClass="passvehicle"
+		parameterClass="java.util.Map">
+       <![CDATA[   select s.*,d.CODEINFO as cjbh,(select g.violationCode from gaVehViolation g where g.plateno=s.plateno and g.alarmtime=s.alarmtime and rownum =1) as violationCode,d.upload,d.cdh,d.SBBH,d.DIRECTION as fxbh,d.cdsl,d.sxjsl  from (select alarmId,trackId,fdId,channelId,channelType,alarmTime,picFeature,to_char(alarmTime,'yyyy-mm-dd hh24:mi:ss')as alarmTimeStr,
+       plateNo,plateType,plateColor,plateCharacterColor,
+       vehicleColor,vehicleType,vehicleLong,recordedSpeed,storageAreaId,centerStoreKey,vehicleChannel ,vehicleFrom,  1 as tryTimes 
+       
+        from  vehicleAlarm v  where trackid>#STARTID# and  trackid<=#ENDID# order by trackid )s 
+        ]]>
+		left JOIN (select * from DEVICE_JCBK where SENDTYPE=#TYPE#) d on
+		s.FDID =d.fdid and s.channelId=d.channelId
+	</select>
+	<select id="querystartMaxAlarmId" resultClass="long">
+		select
+		Max(trackid) from vehicleAlarm
+	</select>
+	<insert id="failDataLast_insert" parameterClass="failDataLast">
+		insert into
+		failDataLast (
+		id,
+		startId,
+		endId,
+		createTime,type) values
+		(#id#,
+		#startId#,
+		#endId#,
+		#createTime#,#sendType#)
+	</insert>
+	<delete id="failDataLast_delete" parameterClass="java.lang.String">
+		delete from
+		failDataLast where id=#id#
+	</delete>
+	<select id="failDataLast_one" parameterClass="int" resultClass="failDataLast">
+       <![CDATA[  select id,
+        startId,
+        endId,
+        createTime from failDataLast   where rownum  =1 and TYPE=#sendType#
+        ]]>
+	</select>
+	<update id="failDataLast_update" parameterClass="failDataLast">
+		update
+		failDataLast set startId=#startId# where
+		id=#id#
+	</update>
+
+	<insert id="datacopylast_insert" parameterClass="datacopylast">
+		insert into
+		datacopylast (
+		domainId,
+		action,
+		datalasttime,
+		acttime,
+		detail,
+		lastseq)
+		values
+		(#domainId#,
+		#action#,
+		#datalasttime#,
+		#acttime#,
+		#detail#,
+		#lastseq#)
+	</insert>
+	<select id="querydatacopylastByDomainId" parameterClass="string"
+		resultClass="datacopylast">
+		select domainId,action,datalasttime,acttime,detail,lastseq
+		from datacopylast
+		where domainId=#domainId#
+	</select>
+
+	<update id="datacopylast_update" parameterClass="datacopylast">
+		update
+		datacopylast set acttime =sysdate,
+		datalasttime=#datalasttime#,lastseq=#lastseq# where
+		domainId=#domainId#
+	</update>
+
+	<select id="querydatacopylastByDomainIdAndAction" resultClass="datacopylast"
+		parameterClass="map">
+		select t.* from (select
+		domainId,action,datalasttime,acttime,detail,lastseq from datacopylast
+		where 1=1
+		<isNotEmpty prepend="AND" property="domainId">
+			(domainId=#domainId#)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="action">
+			(action=#action#)
+		</isNotEmpty>
+		) t where rownum =1
+
+	</select>
+	<select id="queryAlldatacopylast" resultClass="datacopylast">
+		select
+		domainId,action,datalasttime,acttime,detail,lastseq from datacopylast
+	</select>
+	<select id="getDataCopyLastSeq" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		select lastseq from datacopylast where domainId=#domainId#
+		and action =
+		#action#
+	</select>
+	<select id="getdevice_bytype" resultClass="java.util.HashMap"
+		parameterClass="int">
+		select FDID,CHANNELID,CDH,CODEINFO,DIRECTION,
+		NEEDSENDPIC,SBBH,SENDTYPE,cdsl,sxjsl from
+		DEVICE_JCBK d where sendType
+		=#type#
+	</select>
+
+</sqlMap>
