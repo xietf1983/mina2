@@ -189,7 +189,8 @@
 	</select>
 	<select id="vehicleAlarm_List" resultClass="passvehicle"
 		parameterClass="java.util.Map">
-       <![CDATA[   select s.*,d.CODEINFO as cjbh,(select g.violationCode from gaVehViolation g where g.plateno=s.plateno and g.alarmtime=s.alarmtime and rownum =1) as violationCode,d.upload,d.cdh,d.SBBH,d.DIRECTION as fxbh,d.cdsl,d.sxjsl  from (select alarmId,trackId,fdId,channelId,channelType,alarmTime,picFeature,to_char(alarmTime,'yyyy-mm-dd hh24:mi:ss')as alarmTimeStr,
+       <![CDATA[   select s.*,d.CODEINFO as cjbh,(select g.violationCode from gaVehViolation g where g.plateno=s.plateno and g.alarmtime=s.alarmtime and rownum =1 and g.violationCode in ('1625','1302','1301','1303','1352','1633','1636','1603','16033','16034','1721')) as violationCode,
+       d.upload,d.cdh,d.SBBH,d.DIRECTION as fxbh,d.cdsl,d.sxjsl  from (select alarmId,trackId,fdId,channelId,channelType,alarmTime,picFeature,to_char(alarmTime,'yyyy-mm-dd hh24:mi:ss')as alarmTimeStr,
        plateNo,plateType,plateColor,plateCharacterColor,
        vehicleColor,vehicleType,vehicleLong,recordedSpeed,storageAreaId,centerStoreKey,vehicleChannel ,vehicleFrom,  1 as tryTimes 
        
