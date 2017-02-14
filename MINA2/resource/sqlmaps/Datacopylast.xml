@@ -294,5 +294,10 @@
 		DEVICE_JCBK d where sendType
 		=#type#
 	</select>
-
+	
+	<insert id="insertGpsVehicleRecord" parameterClass="com.liveyc.mina.taizhou.server.model.ServerGpsVehicleRecordModel">
+		insert into GPSVEHICLERECORD (ALARMTIME,VEHICLENO,LNG,LAT,VEC1,VEC2,VEC3,DIRECTION,ALTITUDE,STATE,ALARM,VEHICLECOLOR) 
+			values
+		(#alarmTime#,#vehicleNo#,#lon#,#lat#,#vec1#,#vec2#,#vec3#,#direction#,#altitude#,#state#,#alarm#,#vehicleColor#)
+	</insert>
 </sqlMap>

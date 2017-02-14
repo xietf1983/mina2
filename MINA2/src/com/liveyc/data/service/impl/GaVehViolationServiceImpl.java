@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.liveyc.data.persistence.GaVehViolationPersistence;
 import com.liveyc.data.service.GaVehViolationService;
+import com.liveyc.mina.taizhou.server.model.ServerGpsVehicleRecordModel;
 
 
 public class GaVehViolationServiceImpl implements GaVehViolationService{
@@ -49,6 +50,10 @@ public class GaVehViolationServiceImpl implements GaVehViolationService{
 
 	public Map getFromgavehviolation(Map map1) {
 		return getPersistence().getFromgavehviolation(map1);
+	}
+
+	public void addGpsVehicleRecord(ServerGpsVehicleRecordModel model) {
+		getPersistence().addGpsVehicleRecord(model);
 	}
 
 }

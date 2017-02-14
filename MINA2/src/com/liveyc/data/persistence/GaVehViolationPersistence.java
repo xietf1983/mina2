@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
+import com.liveyc.mina.taizhou.server.model.ServerGpsVehicleRecordModel;
+
 public class GaVehViolationPersistence extends SqlMapClientDaoSupport {
 	public List<HashMap> getGaVehViolationCheck(Map parameter) {
 		return getSqlMapClientTemplate().queryForList("gavehviolation_list_checked", parameter);
@@ -49,5 +51,8 @@ public class GaVehViolationPersistence extends SqlMapClientDaoSupport {
 	public Map getFromgavehviolation(Map map1) {
 		return (Map) getSqlMapClientTemplate().queryForObject("gavehviolation_start", map1);
 	}
-
+	
+	public void addGpsVehicleRecord(ServerGpsVehicleRecordModel model) {
+		getSqlMapClientTemplate().insert("insertGpsVehicleRecord", model);
+	}
 }

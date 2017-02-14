@@ -12,7 +12,11 @@
 		<property name="triggers">
 			<list>
 				<!--布控号牌初始化 -->
-				<ref bean="dataSendJobTrigger" />
+				<!-- <ref bean="gaVehViolationMachTrigger" />  -->
+				<!-- 台州车辆定位信息获取服务端 -->
+				<ref bean="GpsVehicleRecordJobTrigger"/>
+				<!-- 台州车辆定位信息获取测试客户端 -->
+				<!-- <ref bean="SendGpsVehicleRecordJobTrigger"/>  -->
 			</list>
 		</property>
 	</bean>
@@ -60,6 +64,56 @@
 		</property>
 		<property name="startDelay">
 			<value>6000</value>
+		</property>
+		<property name="repeatInterval">
+			<value>3153600000000</value>
+		</property>
+	</bean>
+	
+	<!-- 服务端 -->
+	<bean id="com.liveyc.mina.taizhou.server.GpsVehicleRecordJob"
+		class="com.liveyc.mina.taizhou.server.GpsVehicleRecordJob">
+	</bean>
+	<bean id="GpsVehicleRecordJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="com.liveyc.mina.taizhou.server.GpsVehicleRecordJob" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="GpsVehicleRecordJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="GpsVehicleRecordJob" />
+		</property>
+		<property name="startDelay">
+			<value>6000</value>
+		</property>
+		<property name="repeatInterval">
+			<value>3153600000000</value>
+		</property>
+	</bean>
+	
+	<!-- 客户端 -->
+	<bean id="com.liveyc.mina.taizhou.SendGpsVehicleRecordJob"
+		class="com.liveyc.mina.taizhou.SendGpsVehicleRecordJob">
+	</bean>
+	<bean id="SendGpsVehicleRecordJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="com.liveyc.mina.taizhou.SendGpsVehicleRecordJob" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="SendGpsVehicleRecordJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="SendGpsVehicleRecordJob" />
+		</property>
+		<property name="startDelay">
+			<value>10000</value>
 		</property>
 		<property name="repeatInterval">
 			<value>3153600000000</value>

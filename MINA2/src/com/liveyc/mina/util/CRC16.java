@@ -10,7 +10,7 @@ public class CRC16 {
 
     private short getCrcOfByte(int aByte) {
         int value = aByte << 8;
-
+        	
         for (int count = 7; count >= 0; count--) {
             if ((value & 0x8000) != 0) { // 高第16位为1，可以按位异或
                 value = (value << 1) ^ gPloy;

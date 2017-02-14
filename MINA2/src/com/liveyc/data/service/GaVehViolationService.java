@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.liveyc.mina.taizhou.server.model.ServerGpsVehicleRecordModel;
+
 public interface GaVehViolationService {
 	public List<HashMap> getGaVehViolationCheck(Map parameter);
 
@@ -20,4 +22,6 @@ public interface GaVehViolationService {
 	public Map getMaxgavehviolation(Map map1);
 
 	public Map getFromgavehviolation(Map map1);
+	
+	public void addGpsVehicleRecord(ServerGpsVehicleRecordModel model);
 }
