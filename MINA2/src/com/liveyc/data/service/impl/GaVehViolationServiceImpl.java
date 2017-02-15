@@ -55,5 +55,6 @@ public class GaVehViolationServiceImpl implements GaVehViolationService{
 	public void addGpsVehicleRecord(ServerGpsVehicleRecordModel model) {
 		getPersistence().addGpsVehicleRecord(model);
 	}
+	
 
 }
