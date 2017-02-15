@@ -24,4 +24,5 @@ public interface GaVehViolationService {
 	public Map getFromgavehviolation(Map map1);
 	
 	public void addGpsVehicleRecord(ServerGpsVehicleRecordModel model);
+	
 }
