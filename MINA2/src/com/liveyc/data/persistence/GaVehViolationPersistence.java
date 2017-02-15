@@ -55,4 +55,6 @@ public class GaVehViolationPersistence extends SqlMapClientDaoSupport {
 	public void addGpsVehicleRecord(ServerGpsVehicleRecordModel model) {
 		getSqlMapClientTemplate().insert("insertGpsVehicleRecord", model);
 	}
+	
+	
 }
